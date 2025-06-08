@@ -1,0 +1,287 @@
+//cod 1
+#include <stdio.h>
+#include <stdlib.h>
+
+struct TreeNode {
+    int data;
+    struct TreeNode* left;
+    struct TreeNode* right;
+};
+struct TreeNode* createNode(int key) {
+    struct TreeNode* newNode = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+    newNode->data = key;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+struct TreeNode* insert(struct TreeNode* root, int key) {
+    if (root == NULL) return createNode(key);
+    if (key < root->data)
+        root->left = insert(root->left, key);
+    else if (key > root->data)
+        root->right = insert(root->right, key);
+    return root;
+}
+
+struct TreeNode* minValueNode(struct TreeNode* node) {
+    struct TreeNode* current = node;
+    while (current && current->left != NULL)
+        current = current->left;
+    return current;
+}
+
+struct TreeNode* deleteNode(struct TreeNode* root, int key) {
+    if (root == NULL) return root;
+
+    if (key < root->data)
+        root->left = deleteNode(root->left, key);
+    else if (key > root->data)
+        root->right = deleteNode(root->right, key);
+    else {
+        if (root->left == NULL) {
+            struct TreeNode* temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            struct TreeNode* temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        struct TreeNode* temp = minValueNode(root->right);
+        root->data = temp->data;
+        root->right = deleteNode(root->right, temp->data);
+    }
+    return root;
+}
+
+void inorderTraversal(struct TreeNode* root) {
+    if (root != NULL) {
+        inorderTraversal(root->left);
+        printf("%d ", root->data);
+        inorderTraversal(root->right);
+    }
+}
+int main() 
+{
+    int N, rootValue, V;
+    scanf("%d", &N);
+    struct TreeNode* root = NULL;
+    for (int i = 0; i < N; i++) {
+        int key;
+        scanf("%d", &key);
+        if (i == 0) rootValue = key;
+        root = insert(root, key);
+    }
+    scanf("%d", &V);
+    root = deleteNode(root, V);
+    inorderTraversal(root);
+    return 0;
+}
+//cod 2
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+struct Node* insert(struct Node* root, int value) {
+    if (root == NULL) return createNode(value);
+    if (value < root->data)
+        root->left = insert(root->left, value);
+    else if (value > root->data)
+        root->right = insert(root->right, value);
+    return root;
+}
+
+void printPreorder(struct Node* root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        printPreorder(root->left);
+        printPreorder(root->right);
+    }
+}
+int main() {
+    struct Node* root = NULL;
+
+    int n;
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        int value;
+        scanf("%d", &value);
+        root = insert(root, value);
+    }
+
+    printPreorder(root);
+    return 0;
+}
+//cod 3
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+struct Node* insert(struct Node* root, int value) {
+    if (root == NULL) return createNode(value);
+    if (value < root->data)
+        root->left = insert(root->left, value);
+    else if (value > root->data)
+        root->right = insert(root->right, value);
+    return root;
+}
+
+int search(struct Node* root, int key) {
+    if (root == NULL) return 0;
+    if (root->data == key) return 1;
+    if (key < root->data)
+        return search(root->left, key);
+    else
+        return search(root->right, key);
+}
+
+int main() {
+    int n, key;
+    scanf("%d", &n);
+    
+    struct Node* root = NULL;
+    for (int i = 0; i < n; i++) {
+        int value;
+        scanf("%d", &value);
+        root = insert(root, value);
+    }
+
+    scanf("%d", &key);
+    
+    if (search(root, key))
+        printf("Value %d is found in the tree.\n", key);
+    else
+        printf("Value %d is not found in the tree.\n", key);
+
+    return 0;
+}
+//cod 4
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+struct Node* insert(struct Node* root, int data) {
+    if (root == NULL) return createNode(data);
+    if (data < root->data)
+        root->left = insert(root->left, data);
+    else if (data > root->data)
+        root->right = insert(root->right, data);
+    return root;
+}
+
+void displayTreePostOrder(struct Node* root) {
+    if (root != NULL) {
+        displayTreePostOrder(root->left);
+        displayTreePostOrder(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+int findMinValue(struct Node* root) {
+    struct Node* current = root;
+    while (current->left != NULL)
+        current = current->left;
+    return current->data;
+}
+int main() {
+    struct Node* root = NULL;
+    int n, data;
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &data);
+        root = insert(root, data);
+    }
+
+    displayTreePostOrder(root);
+    printf("\n");
+
+    int minValue = findMinValue(root);
+    printf("The minimum value in the BST is: %d", minValue);
+
+    return 0;
+}
+//cod 5
+#include <stdio.h>
+#include <stdlib.h>
+
+struct TreeNode {
+    int data;
+    struct TreeNode* left;
+    struct TreeNode* right;
+};
+struct TreeNode* createNode(int key) {
+    struct TreeNode* newNode = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+    newNode->data = key;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+struct TreeNode* insert(struct TreeNode* root, int key) {
+    if (root == NULL) return createNode(key);
+    if (key < root->data)
+        root->left = insert(root->left, key);
+    else if (key > root->data)
+        root->right = insert(root->right, key);
+    return root;
+}
+
+int findMax(struct TreeNode* root) {
+    struct TreeNode* current = root;
+    while (current->right != NULL)
+        current = current->right;
+    return current->data;
+}
+int main() {
+    int N, rootValue;
+    scanf("%d", &N);
+
+    struct TreeNode* root = NULL;
+
+    for (int i = 0; i < N; i++) {
+        int key;
+        scanf("%d", &key);
+        if (i == 0) rootValue = key;
+        root = insert(root, key);
+    }
+
+    int maxVal = findMax(root);
+    if (maxVal != -1) {
+        printf("%d", maxVal);
+    } 
+return 0;
+}
