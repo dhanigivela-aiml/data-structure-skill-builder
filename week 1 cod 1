@@ -282,3 +282,96 @@ int main(){
     return 0;
  }
 //cod 6
+#include<stdio.h>
+ #include<stdlib.h>
+ struct Node{
+    int data;
+    struct Node*next;
+ };
+ void insertAtEnd(struct Node**head,int data){
+    struct Node*newNode=(struct Node*)malloc(sizeof(struct Node));
+    newNode->data=data;
+    newNode->next=NULL;
+    if(*head==NULL){
+        *head=newNode;
+        return;
+    }
+    struct Node*temp=*head;
+    while(temp->next!=NULL){
+        temp=temp->next;
+    }
+    temp->next=newNode;
+ }
+ void display(struct Node*head){
+    struct Node*temp=head;
+    while(temp!=NULL){
+        printf("%d",temp->data);
+        temp=temp->next;
+    }
+    printf("\n");
+}
+int main(){
+    int N,value;
+    struct Node*head=NULL;
+    scanf("%d",&N);
+    for(int i=0;i<N;i++)
+    {
+        scanf("%d",&value);
+        insertAtEnd(&head,value);
+    }
+    display(head);
+    return 0;
+ }
+//cod 7
+ #include <stdio.h>
+ #include <stdlib.h>
+ struct Node {
+    int data;
+    struct Node* next;
+};
+struct Node*push(struct Node*head,int data){
+struct Node*new_node=(struct Node*)malloc(sizeof(struct Node));
+    new_node->data=data;
+    new_node->next=head;
+    return new_node;
+}
+ int printMiddle(struct Node*head){
+    struct Node*slow=head,*fast=head;
+    while(fast!=NULL&&fast->next!=NULL){
+        slow=slow->next;
+        fast=fast->next->next;
+ }
+    return slow->data;
+ }
+ }
+    return slow->data;
+ }
+ int main() {
+    struct Node* head = NULL;
+    int n;
+    scanf("%d", &n); 
+    int value;
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &value); 
+        head = push(head, value);
+}
+  struct Node* current = head;
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+ int middle_element = printMiddle(head);
+    printf("Middle Element: %d\n", middle_element);
+current = head;
+    while (current != NULL) {
+        struct Node* temp = current;
+        current = current->next;
+        free(temp);
+    }
+current = head;
+    while (current != NULL) {
+        struct Node* temp = current;
+        current = current->next;
+        free(temp);
+    }
