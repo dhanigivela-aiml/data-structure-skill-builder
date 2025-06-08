@@ -1,0 +1,412 @@
+//cod 1
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    char item;
+    struct Node* next;
+    struct Node* prev;
+};
+void insertAtEnd(struct Node** head, char item) {
+    Node * temp=(Node *)malloc(sizeof(Node));
+    temp->prev=NULL;
+    temp->next=NULL;
+    temp->item=item;
+    if(*head==NULL)
+    {
+        *head=temp;
+    }
+    else
+    {
+        Node * p=*head;
+        while(p->next!=NULL)
+        {
+            p=p->next;
+        }
+        p->next=temp;
+        temp->prev=p;
+    }
+}
+void displayForward(struct Node* head) {
+    Node * p=head;
+    while(p!=NULL)
+    {
+        printf("%c ",p->item);
+        p=p->next;
+    }
+    printf("\n");
+}
+
+void displayBackward(struct Node* tail) {
+    Node * p=tail;
+    while(p!=NULL)
+    {
+        printf("%c ",p->item);
+        p=p->prev;
+    }
+    printf("\n");
+}
+
+void freePlaylist(struct Node* head) {
+    Node * p=head;
+    while(p!=NULL)
+    {
+        Node *a=p->next;
+        free(p);
+        p=a;
+    }
+}
+int main() {
+    struct Node* playlist = NULL;
+    char item;
+
+    while (1) {
+        scanf(" %c", &item);
+        if (item == '-') {
+            break;
+        }
+        insertAtEnd(&playlist, item);
+    }
+
+    struct Node* tail = playlist;
+    while (tail->next != NULL) {
+        tail = tail->next;
+    }
+
+    printf("Forward Playlist: ");
+    displayForward(playlist);
+
+    printf("Backward Playlist: ");
+    displayBackward(tail);
+
+    freePlaylist(playlist);
+
+    return 0;
+}
+//cod 2
+// You are using GCC
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node
+{
+    int data;
+    struct node * prev;
+    struct node * next;
+};
+
+typedef struct node node;
+
+
+void insert(node **head,int data)
+{
+    node * temp=(node *)malloc(sizeof(node));
+    temp->prev=NULL;
+    temp->next=NULL;
+    temp->data=data;
+    
+    if(*head==NULL)
+    {
+        *head=temp;
+    }
+    else
+    {
+        node * p=*head;
+        while(p->next!=NULL)
+        {
+            p=p->next;
+        }
+        p->next=temp;
+        temp->prev=p;
+    }
+}
+
+void display(node *head)
+{
+    
+    if(head==NULL)
+    {
+        printf("Empty list!");
+        return;
+    }
+    node * a=head;
+    int b=a->data;
+    a=a->next;
+    while(a!=NULL)
+    {
+        if(a->data>b)
+        {
+            b=a->data;
+        }
+        a=a->next;
+    }
+    printf("%d",b);
+}
+
+int main()
+{
+    int n;
+    scanf("%d",&n);
+    
+    node * head=NULL;
+    int b;
+    for(int i=0;i<n;i++)
+    {
+        scanf("%d",&b);
+        insert(&head,b);
+    }
+    display(head);
+}
+//cod 3
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int info;
+    struct node* prev;
+    struct node* next;
+};
+
+struct node* start = NULL;
+void traverse() {
+    //type your code here
+    printf("Node Inserted\n");
+    struct node * a=start;
+    while(a!=NULL)
+    {
+        printf("%d ",a->info);
+        a=a->next;
+    }
+    printf("\n");
+}
+
+void insertAtFront(int data) {
+    //type your code here
+    struct node * temp=(node *)malloc(sizeof(node));
+    temp->info=data;
+    temp->next=NULL;
+    temp->prev=NULL;
+    
+    if(start==NULL)
+    {
+        start=temp;
+    }
+    else
+    {
+        temp->next=start;
+        temp->next->prev=temp;
+    }
+    start=temp;
+}
+int main() {
+    int n, data;
+    scanf("%d", &n);
+    for (int i = 0; i < n; ++i) {
+        scanf("%d", &data);
+        insertAtFront(data);
+        traverse();
+    }
+    return 0;
+}
+//cod 4
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node
+{
+    int data;
+    struct node * next;
+    struct node * prev;
+};
+
+typedef struct node node;
+node * head=NULL;
+
+void insert(int data)
+{
+    node * temp=(node * )malloc(sizeof(node));
+    temp->data=data;
+    temp->next=NULL;
+    temp->prev=NULL;
+    
+    if(head==NULL)
+    {
+        head=temp;
+    }
+    else
+    {
+        node * a=head;
+        while(a->next!=NULL)
+        {
+            a=a->next;
+        }
+        a->next=temp;
+        temp->prev=a;
+    }
+}
+
+void display()
+{
+    node * a=head;
+    while(a!=NULL)
+    {
+        printf("%d ",a->data);
+        a=a->next;
+    }
+    printf("\n");
+}
+
+int main()
+{
+    int n;
+    scanf("%d",&n);
+
+    int b;
+    for(int i=0;i<n;i++)
+    {
+        scanf("%d",&b);
+        insert(b);
+    }
+    display();
+}
+//cod 5
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int num;
+    struct node *preptr;
+    struct node *nextptr;
+} *stnode, *ennode;
+
+void DlListcreation(int n);
+void DlListDeleteFirstNode();
+void DlListDeleteLastNode();
+void DlListDeleteAnyNode(int pos);
+void displayDlList(int a);
+void DlListcreation(int n) {
+   //type your code here
+   struct node * temp=NULL;
+ 
+   for(int i=0;i<n;i++)
+   {
+       temp=(node *)malloc(sizeof(node));
+       scanf("%d",&temp->num);
+       temp->preptr=NULL;
+       temp->nextptr=NULL;
+       
+       if(stnode==NULL)
+       {
+           stnode=ennode=temp;
+       }
+       else
+       {
+           ennode->nextptr=temp;
+           ennode=temp;
+       }
+   }
+}
+
+void DlListDeleteAnyNode(int pos) {
+   //type your code here
+   
+   if(stnode==NULL)
+   {
+       return;
+   }
+   if(pos==1)
+   {
+       DlListDeleteFirstNode();
+       return;
+   }
+   node * temp=stnode;
+   for(int i=0;i<pos-2;i++)
+   {
+       temp=temp->nextptr;
+   }
+   if(temp->nextptr->nextptr==NULL)
+   {
+       temp->nextptr=NULL;
+       return;
+   }
+   node * a=temp->nextptr;
+   temp->nextptr=a->nextptr;
+   a->nextptr->preptr=temp;
+   
+}
+
+void DlListDeleteFirstNode() {
+    //type your code here
+    if(stnode==NULL)
+    {
+        return;
+    }
+    struct node* temp=stnode;
+    if(stnode==ennode)
+    {
+        ennode=NULL;
+        stnode=NULL;
+        return;
+    }
+    stnode=stnode->nextptr;
+    stnode->preptr=NULL;
+    free(temp);
+}
+
+void DlListDeleteLastNode() {
+    //type your code here
+    
+    if(stnode==NULL)
+    {
+        return;
+    }
+    if(stnode==ennode)
+    {
+        ennode=NULL;
+        stnode=NULL;
+        return;
+    }
+    struct node * temp=ennode->preptr;
+    temp->nextptr=NULL;
+    free(temp);
+}
+
+void displayDlList(int m) {
+   //type your code here
+   if(m==1)
+   {
+       printf("Data entered in the list:\n");
+   }
+   else if(m==2)
+   {
+       printf("After deletion the new list:\n");
+   }
+   struct node * a=stnode;
+   int i=1;
+   while(a!=NULL)
+   {
+       printf("node %d : %d\n",i,a->num);
+       a=a->nextptr;
+       i++;
+   }
+}
+int main() {
+    int n, num1, a, insPlc;
+    stnode = NULL;
+    ennode = NULL;
+    scanf("%d", &n);
+    DlListcreation(n);
+    a = 1;
+    displayDlList(a);
+    scanf("%d", &insPlc);
+
+    if (insPlc < 1 || insPlc > n) {
+        printf("Invalid position. Try again.");
+    }
+    if (insPlc >= 1 && insPlc <= n) {
+        DlListDeleteAnyNode(insPlc);
+        a = 2;
+        displayDlList(a);
+    }
+    return 0;
+}
