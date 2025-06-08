@@ -1,0 +1,71 @@
+#include <stdio.h>
+ #include <stdlib.h>
+ void insert(int);
+ void display_List();
+ void deleteNode(int);
+ struct node {
+    int data;
+    struct node* next;
+ } *head = NULL, *tail = NULL;
+ void insert(int value){
+ 241501042
+    struct node* newNode=(struct node*)malloc(sizeof(struct node));
+    newNode->data=value;
+    newNode->next=NULL;
+    if(head==NULL){
+ 241501042
+ 241501042
+        head=newNode;
+        tail=newNode;
+    }else{
+        tail->next=newNode;
+        tail=newNode;
+  }
+ }
+ void display_List(){
+    struct node* temp=head;
+    while(temp != NULL){
+        printf("%d ",temp->data);
+        temp=temp->next;
+    }
+    printf("\n");
+ }
+ void deleteNode(int position){
+    if(head==NULL){
+        printf("Invalid position.Deletion not possible.\n");
+        return;
+    }
+    struct node* temp=head;
+    if(position==1){
+        head=head->next;
+        free(temp);
+        display_List();
+        return;
+    }
+    struct node* prev=NULL;
+    for(int i=1;temp!=NULL&&i<position;i++){
+        prev=temp;
+        temp=temp->next;
+    }
+    if(temp==NULL){
+        printf("Invalid position.Deletion not possible.\n");
+        return;
+    }
+    prev->next=temp->next;
+    if(temp==tail){
+        tail=prev;
+    }
+    free(temp);
+    display_List();
+ }
+int main(){
+ int num_elements, element, pos_to_delete;
+    scanf("%d", &num_elements);
+    for (int i = 0; i < num_elements; i++) {
+        scanf("%d", &element);
+        insert(element);
+    }
+    scanf("%d", &pos_to_delete);
+    deleteNode(pos_to_delete);
+    return 0;
+ }
