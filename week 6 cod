@@ -1,0 +1,256 @@
+//cod 1
+#include <stdio.h>
+void merge(int arr[], int left[], int right[], int left_size, int right_size) {
+    int i = 0, j = 0, k = 0;
+
+    while (i < left_size && j < right_size) {
+        if (left[i] < right[j]) {
+            arr[k++] = left[i++];
+        } else {
+            arr[k++] = right[j++];
+        }
+    }
+
+    while (i < left_size) {
+        arr[k++] = left[i++];
+    }
+
+    while (j < right_size) {
+        arr[k++] = right[j++];
+    }
+}
+
+
+void mergeSort(int arr[], int size) {
+    
+    if (size < 2) return;
+
+    int mid = size / 2;
+    int left[mid], right[size - mid];
+
+    for (int i = 0; i < mid; i++) {
+        left[i] = arr[i];
+    }
+    for (int i = mid; i < size; i++) {
+        right[i - mid] = arr[i];
+    }
+
+    mergeSort(left, mid);
+    mergeSort(right, size - mid);
+
+    merge(arr, left, right, mid, size - mid);
+}
+int main() {
+    int n, m;
+    scanf("%d", &n);
+    int arr1[n], arr2[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr1[i]);
+    }
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr2[i]);
+    }
+    int merged[n + n];
+    mergeSort(arr1, n);
+    mergeSort(arr2, n);
+    merge(merged, arr1, arr2, n, n);
+    for (int i = 0; i < n + n; i++) {
+        printf("%d ", merged[i]);
+    }
+    return 0;
+}
+//cod 2
+#include<stdio.h>
+void insertionSort(int arr[], int n) {
+        for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    int arr[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    insertionSort(arr, n);   
+    printArray(arr, n);      
+    return 0;
+}
+//cod 3
+#include <stdio.h>
+#include <string.h>
+void swap(char *a, char *b) {
+    char temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int partition(char arr[], int low, int high) {
+    char pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] > pivot) { 
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+
+void quicksort(char arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+
+        quicksort(arr, low, pi - 1);
+        quicksort(arr, pi + 1, high);
+    }
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    char characters[n];
+
+    for (int i = 0; i < n; i++) {
+        char input;
+        scanf(" %c", &input);
+        characters[i] = input;
+    }
+
+    quicksort(characters, 0, n - 1);
+
+    for (int i = 0; i < n; i++) {
+        printf("%c ", characters[i]);
+    }
+
+    return 0;
+}
+//cod 4
+#include <stdio.h>
+#include <stdlib.h>
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+void findNthLargest(int arr[], int n, int k) {
+    quickSort(arr, 0, n - 1);
+    printf("%d\n", arr[n - k]);
+}
+int main() {
+    int n, k;
+    scanf("%d", &n);
+    int* nums = (int*)malloc(n * sizeof(int));
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &nums[i]);
+    }
+    scanf("%d", &k); 
+    findNthLargest(nums, n, k); 
+    free(nums);
+    return 0;
+}
+//cod 5
+#include <stdio.h>
+#include <stdlib.h>
+void merge(double arr[], int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    double leftArr[n1], rightArr[n2];
+
+    for (int i = 0; i < n1; i++)
+        leftArr[i] = arr[left + i];
+
+    for (int i = 0; i < n2; i++)
+        rightArr[i] = arr[mid + 1 + i];
+
+    int i = 0, j = 0, k = left;
+
+    while (i < n1 && j < n2) {
+        if (leftArr[i] <= rightArr[j]) {
+            arr[k] = leftArr[i];
+            i++;
+        } else {
+            arr[k] = rightArr[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = leftArr[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = rightArr[j];
+        j++;
+        k++;
+    }
+}
+
+void mergeSort(double arr[], int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    double fractions[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%lf", &fractions[i]);
+    }
+    mergeSort(fractions, 0, n - 1);
+    for (int i = 0; i < n; i++) {
+        printf("%.3f ", fractions[i]);
+    }
+    return 0;
+}
