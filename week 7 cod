@@ -1,0 +1,304 @@
+//cod 1
+#include <stdio.h>
+
+#define MAX 100
+void initializeTable(int table[], int size) {
+    for (int i = 0; i < size; i++) {
+        table[i] = -1;
+    }
+}
+
+
+void insertIntoHashTable(int table[], int size, int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        int roll = arr[i];
+        int index = roll % size;
+
+        
+        while (table[index] != -1) {
+            index = (index + 1) % size;  
+        }
+
+        table[index] = roll;
+    }
+}
+
+
+void printTable(int table[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", table[i]);
+    }
+}
+int main() {
+    int n, table_size;
+    scanf("%d %d", &n, &table_size);
+
+    int arr[MAX];
+    int table[MAX];
+
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    initializeTable(table, table_size);
+    insertIntoHashTable(table, table_size, arr, n);
+    printTable(table, table_size);
+
+    return 0;
+}
+//cod 2
+#include <stdio.h>
+
+#define MAX 100
+void initializeTable(int table[], int size) {
+    for (int i = 0; i < size; i++) {
+        table[i] = -1;
+    }
+}
+
+
+void insertIntoHashTable(int table[], int size, int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        int roll = arr[i];
+        int index = roll % size;
+
+       
+        while (table[index] != -1) {
+            index = (index + 1) % size;
+        }
+
+        table[index] = roll;
+    }
+}
+
+
+int searchInHashTable(int table[], int size, int key) {
+    int index = key % size;
+    int start = index;
+
+    
+    while (table[index] != -1) {
+        if (table[index] == key) {
+            return 1; 
+        }
+        index = (index + 1) % size;
+        if (index == start) break; 
+    }
+
+    return 0; 
+}
+int main() {
+    int n, table_size;
+    scanf("%d %d", &n, &table_size);
+
+    int arr[MAX], table[MAX];
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    initializeTable(table, table_size);
+    insertIntoHashTable(table, table_size, arr, n);
+
+    int q, x;
+    scanf("%d", &q);
+    for (int i = 0; i < q; i++) {
+        scanf("%d", &x);
+        if (searchInHashTable(table, table_size, x))
+            printf("Value %d: Found\n", x);
+        else
+            printf("Value %d: Not Found\n", x);
+    }
+
+    return 0;
+}
+//cod 3
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct {
+    char key[50];
+    char value[50];
+} KeyValuePair;
+typedef struct {
+    KeyValuePair *pairs;
+    int size;
+    int capacity;
+} Dictionary;
+void initDictionary(Dictionary *dict) {
+    dict->size = 0;
+    dict->capacity = 10;
+    dict->pairs = (KeyValuePair *)malloc(dict->capacity * sizeof(KeyValuePair));
+}
+int doesKeyExist(Dictionary *dict, const char *key) {
+    for (int i = 0; i < dict->size; i++) {
+        if (strcmp(dict->pairs[i].key, key) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+
+void insertKeyValuePair(Dictionary *dict, const char *key, const char *value) {
+  
+    if (dict->size >= dict->capacity) {
+        dict->capacity *= 2;
+        dict->pairs = (KeyValuePair *)realloc(dict->pairs, dict->capacity * sizeof(KeyValuePair));
+    }
+
+    strcpy(dict->pairs[dict->size].key, key);
+    strcpy(dict->pairs[dict->size].value, value);
+    dict->size++;
+}
+
+void removeKeyValuePair(Dictionary *dict, const char *key) {
+    int found = 0;
+    for (int i = 0; i < dict->size; i++) {
+        if (strcmp(dict->pairs[i].key, key) == 0) {
+            found = 1;
+            for (int j = i; j < dict->size - 1; j++) {
+                dict->pairs[j] = dict->pairs[j + 1];
+            }
+            dict->size--;
+            break;
+        }
+    }
+}
+
+
+void printDictionary(Dictionary *dict) {
+    for (int i = 0; i < dict->size; i++) {
+        printf("Key: %s; Value: %s\n", dict->pairs[i].key, dict->pairs[i].value);
+    }
+}
+int main() {
+    Dictionary dict;
+    initDictionary(&dict);
+
+    int numPairs;
+    scanf("%d", &numPairs);
+
+    char key[50], value[50];
+    for (int i = 0; i < numPairs; i++) {
+        scanf("%s %s", key, value);
+        insertKeyValuePair(&dict, key, value);
+    }
+
+    scanf("%s", key);
+
+    if (doesKeyExist(&dict, key)) {
+        printf("The given key is removed!\n");
+        removeKeyValuePair(&dict, key);
+        printDictionary(&dict);
+    } else {
+        printf("The given key is not found!\n");
+        printDictionary(&dict);
+    }
+
+    free(dict.pairs);
+    return 0;
+}
+//cod 4
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_KEY_LENGTH 100
+
+typedef struct {
+    char key[MAX_KEY_LENGTH];
+    int value;
+} KeyValuePair;
+int keyExists(KeyValuePair* dictionary, int n, const char* key) {
+    for (int i = 0; i < n; i++) {
+        if (strcmp(dictionary[i].key, key) == 0) {
+            return 1; // key found
+        }
+    }
+    return 0; // key not found
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    KeyValuePair* dictionary = (KeyValuePair*)malloc(n * sizeof(KeyValuePair));
+
+    for (int i = 0; i < n; i++) {
+        scanf("%s %d", dictionary[i].key, &dictionary[i].value);
+    }
+
+    char key_to_search[MAX_KEY_LENGTH];
+    scanf("%s", key_to_search);
+
+    if (keyExists(dictionary, n, key_to_search)) {
+        printf("Key \"%s\" exists in the dictionary.\n", key_to_search);
+    } else {
+        printf("Key \"%s\" does not exist in the dictionary.\n", key_to_search);
+    }
+
+    free(dictionary);
+    return 0;
+}
+//cod 5
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
+#define MAX_SIZE 100
+int getOddOccurrence(int arr[], int n) {
+    int hash_table[100] = {0};  
+    int original_values[100];   
+    int stored[100] = {0};      
+    int i;
+
+    for (i = 0; i < n; i++) {
+        int key = arr[i];
+        int squared = key * key;
+        int hash_index = squared % 100;
+
+        
+        if (stored[hash_index] && original_values[hash_index] == key) {
+            hash_table[hash_index]++;
+        } else if (!stored[hash_index]) {
+            original_values[hash_index] = key;
+            hash_table[hash_index] = 1;
+            stored[hash_index] = 1;
+        } else {
+            
+            int j = (hash_index + 1) % 100;
+            while (j != hash_index) {
+                if (!stored[j]) {
+                    original_values[j] = key;
+                    hash_table[j] = 1;
+                    stored[j] = 1;
+                    break;
+                } else if (original_values[j] == key) {
+                    hash_table[j]++;
+                    break;
+                }
+                j = (j + 1) % 100;
+            }
+        }
+    }
+
+    // Find the key that occurred odd number of times
+    for (i = 0; i < 100; i++) {
+        if (stored[i] && (hash_table[i] % 2 != 0)) {
+            return original_values[i];
+        }
+    }
+
+    return -1; // No element with odd occurrences
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int arr[MAX_SIZE];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    printf("%d\n", getOddOccurrence(arr, n));
+
+    return 0;
+}
