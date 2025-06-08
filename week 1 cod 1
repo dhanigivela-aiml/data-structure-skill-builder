@@ -130,3 +130,62 @@ int main(){
     return 0;
  }
 //cod 3
+ #include<stdio.h>
+ #include<stdlib.h>
+ typedef struct Node{
+    char data;
+    struct Node* next;
+ }Node;
+ Node* createNode(char data){
+    Node* newNode=(Node*)malloc(sizeof(Node));
+    newNode->data=data;
+    newNode->next=NULL;
+    return newNode;
+}
+void insertAfter(Node*head,int index,char newChar){
+    Node* temp=head;
+    int count =0;
+    while(temp!=NULL && count<index){
+        temp=temp->next;
+        count++;
+    }
+ if(temp==NULL){
+    printf("Invalid index\n");
+    return;
+    }
+    Node* newNode=createNode(newChar);
+    newNode->next=temp->next;
+    temp->next=newNode;
+ }
+ void printList(Node* head){
+    Node* temp=head;
+    printf("Updated list: ");
+    while(temp != NULL){
+        printf("%c ",temp->data);
+        temp=temp->next;
+    }
+    printf("\n");
+ }
+ int main(){
+    int N,index;
+    char newChar;
+    scanf("%d",&N);
+    Node* head=NULL,*tail=NULL;
+    for(int i=0;i<N;i++){
+        char ch;
+        scanf(" %c",&ch);
+        Node* newNode=createNode(ch);
+        if(head==NULL)
+        head=tail=newNode;
+        else{
+            tail->next=newNode;
+            tail=newNode;
+        }
+    }
+    scanf("%d",&index);
+ scanf(" %c",&newChar);
+    Node* oldHead=head;
+    insertAfter(head,index,newChar);
+    printList(oldHead);
+    return 0;
+ }
