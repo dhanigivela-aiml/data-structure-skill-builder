@@ -1,0 +1,361 @@
+//cod 1
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+void push(int val);
+void pop();
+void display();
+
+
+void push(int val) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = val;
+    newNode->next = top;
+    top = newNode;
+    printf("Pushed element: %d\n", val);
+}
+
+void pop() {
+    if (top == NULL) {
+        printf("Stack is empty. Cannot pop.\n");
+        return;
+    }
+    struct Node* temp = top;
+    printf("Popped element: %d\n", top->data);
+    top = top->next;
+    free(temp);
+}
+
+void displayStack() {
+    if (top == NULL) {
+        printf("Stack is empty\n");
+        return;
+    }
+    printf("Stack elements (top to bottom): ");
+    struct Node* temp = top;
+    while (temp != NULL) {
+        printf("%d", temp->data);
+        if (temp->next != NULL) printf(" ");
+        temp = temp->next;
+    }
+    printf("\n");
+}
+int main() {
+    int choice, value;
+    do {
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                scanf("%d", &value);
+                push(value);
+                break;
+            case 2:
+                pop();
+                break;
+            case 3:
+                displayStack();
+                break;
+            case 4:
+                printf("Exiting program\n");
+                return 0;
+            default:
+                printf("Invalid choice\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+//cod 2
+#include<stdio.h>
+#define MAX 100
+
+int st[MAX];
+int top=-1;
+
+void push(int id){
+    if(top==MAX-1)
+    {
+        return;
+    }
+    top++;
+    st[top]=id;
+    printf("Book ID %d is pushed onto the stack\n",id);
+}
+
+void pop(){
+    if(top==-1){
+        printf("Stack underflow\n");
+    }else{
+        printf("Book ID %d is popped from the stack\n",st[top]);
+        top--;
+    }
+}
+
+void dis(){
+    if(top==-1){
+        printf("Stack is empty\n");
+    }else{
+        printf("Book ID in the stack: ");
+        for(int i=top;i>=0;i--){
+            printf("%d ",st[i]);
+        }
+        printf("\n");
+    }
+}
+
+int main(){
+    int ch,id;
+    do{
+        scanf("%d",&ch);
+        switch(ch){
+            case 1:
+            scanf("%d",&id);
+            push(id);
+            break;
+            case 2:
+            pop();
+            break;
+            case 3:
+            dis();
+            break;
+            case 4:
+            printf("Exiting the program\n");
+            return 0;
+            default:
+            printf("Invalid choice\n");
+        }
+    }while(ch!=4);
+}
+//cod 3
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_SIZE 100
+
+char items[MAX_SIZE];
+int top = -1;
+void push(char value) {
+    if(isFull())
+    {
+        return;
+    }
+    top++;
+    items[top]=value;
+    printf("Pushed: %c\n",value);
+}
+
+void pop() {
+    if(isEmpty()){
+        printf("Stack is empty. Nothing to pop.\n");
+    }else{
+        printf("Popped: %c\n",items[top]);
+        top--;
+    }
+}
+void display() {
+    if(isEmpty()){
+        printf("Stack is empty.\n");
+    }else{
+        printf("Stack elements: ");
+        for(int i=top;i>=0;i--){
+            printf("%c ",items[i]);
+        }
+        printf("\n");
+    }
+}
+int main() {
+    initialize();
+    int choice;
+    char value;
+
+    while (true) {
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                scanf(" %c", &value);
+                push(value);
+                break;
+            case 2:
+                pop();
+                break;
+            case 3:
+                display();
+                break;
+            case 4:
+                return 0;
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+    return 0;
+}
+//cod 4
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Stack {
+    int top;
+    unsigned capacity;
+    char* array;
+};
+
+struct Stack* createStack(unsigned capacity) {
+    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
+
+    if (!stack)
+        return NULL;
+
+    stack->top = -1;
+    stack->capacity = capacity;
+    stack->array = (char*)malloc(stack->capacity * sizeof(char));
+
+    return stack;
+}
+
+int isEmpty(struct Stack* stack) {
+    return stack->top == -1;
+}
+
+char peek(struct Stack* stack) {
+    return stack->array[stack->top];
+}
+
+char pop(struct Stack* stack) {
+    if (!isEmpty(stack))
+        return stack->array[stack->top--];
+    return '$';  
+}
+
+void push(struct Stack* stack, char op) {
+    stack->array[++stack->top] = op;
+}
+int isOperand(char ch) {
+    return (ch>='a'&&ch<='z')||(ch>='A'&&ch<='Z');
+}
+
+int Prec(char ch) {
+   switch(ch){
+       case '+':
+       case '-':
+       return 1;
+       case '*':
+       case '/':
+       return 2;
+       case '^':
+       return 3;
+   }
+   return -1;
+}
+
+void infixToPostfix(char* exp) {
+    int i,k;
+    struct Stack*stack=createStack(strlen(exp));
+    if(!stack)
+    return;
+    
+    for(i=0;exp[i];i++){
+        char c=exp[i];
+        
+        if(isOperand(c)){
+            printf("%c",c);
+        }
+        else if(c=='('){
+            push(stack,c);
+        }
+        else if(c==')'){
+            while(!isEmpty(stack)&&peek(stack)!='(')
+            printf("%c",pop(stack));
+            if(!isEmpty(stack)&&peek(stack)!='(')
+            return;
+            else
+            pop(stack);
+        }
+        else{
+            while(!isEmpty(stack)&&Prec(c)<=Prec(peek(stack))){
+                if(c=='^'&&peek(stack)=='^')
+                break;
+                else
+                printf("%c",pop(stack));
+            }
+            push(stack,c);
+        }
+    }while(!isEmpty(stack)) printf("%c",pop(stack));
+}
+int main() {
+    char exp[100];
+    scanf("%s", exp);
+
+    infixToPostfix(exp);
+    return 0;
+}
+//cod 5
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    char data;
+    struct Node* next;
+};
+void push(char value) {
+    struct Node*nnode=(struct Node*)malloc(sizeof(struct Node));
+    nnode->data=value;
+    nnode->next=top;
+    top=nnode;
+    printf("Adding Section: %c\n",value);
+}
+
+void pop() {
+    if(top==NULL){
+        printf("Stack is empty. Cannot pop.\n");
+    }else{
+        printf("Removing section: %c\n",top->data);
+        struct Node* temp=top;
+        top=top->next;
+        free(temp);
+    }
+}
+
+void displayStack() {
+    if(top==NULL){
+        printf("Stack is empty\n");
+    }else{
+        printf("Enrolled Sections: ");
+        struct Node*temp=top;
+        while(temp!=NULL){
+            printf("%C ",temp->data);
+            temp=temp->next;
+        }
+        printf("\n");
+    }
+}
+int main() {
+    int choice;
+    char value;
+    do {
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                scanf(" %c", &value);
+                push(value);
+                break;
+            case 2:
+                pop();
+                break;
+            case 3:
+                displayStack();
+                break;
+            case 4:
+                printf("Exiting program\n");
+                break;
+            default:
+                printf("Invalid choice\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
